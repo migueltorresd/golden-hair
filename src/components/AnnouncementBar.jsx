@@ -1,23 +1,20 @@
 import { useState, useEffect } from 'react';
-
-const AVISOS = [
-  'Envío gratis desde $89.000 · Solo envíos en Bogotá',
-  'Mascarilla capilar 250 g · Hecha en Colombia · Envíos a Bogotá',
-  'Libre de sulfatos y parabenos · Tu cabello lo nota desde la primera aplicación',
-];
+import { useLang } from '../i18n/LanguageContext';
 
 export default function AnnouncementBar() {
+  const { t } = useLang();
   const [idx, setIdx] = useState(0);
+  const avisos = t.avisos;
 
   useEffect(() => {
-    const id = setInterval(() => setIdx(i => (i + 1) % AVISOS.length), 4000);
+    const id = setInterval(() => setIdx(i => (i + 1) % avisos.length), 4000);
     return () => clearInterval(id);
-  }, []);
+  }, [avisos.length]);
 
   return (
     <div className="avisos">
       <div className="contenedor">
-        <p className="aviso-texto">{AVISOS[idx]}</p>
+        <p className="aviso-texto">{avisos[idx]}</p>
       </div>
     </div>
   );

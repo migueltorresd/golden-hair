@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLang } from '../i18n/LanguageContext';
 
 const OrnIcon = () => (
   <svg width="12" height="12" viewBox="0 0 12 12">
@@ -9,6 +10,9 @@ const OrnIcon = () => (
 const WHATSAPP = '573213268940';
 
 export default function OrderForm() {
+  const { t } = useLang();
+  const p = t.pedido;
+  // `presentacion` guarda el índice de la opción, así el select sobrevive al cambio de idioma.
   const [form, setForm] = useState({ nombre: '', tel: '', ciudad: '', presentacion: '', nota: '' });
   const [errores, setErrores] = useState({});
   const [enviado, setEnviado] = useState(false);
@@ -20,7 +24,7 @@ export default function OrderForm() {
     if (!form.nombre.trim()) e.nombre = true;
     if (!/^\d{10}$/.test(form.tel.trim())) e.tel = true;
     if (!form.ciudad.trim()) e.ciudad = true;
-    if (!form.presentacion) e.presentacion = true;
+    if (form.presentacion === '') e.presentacion = true;
     return e;
   };
 
@@ -30,8 +34,8 @@ export default function OrderForm() {
     setErrores(e2);
     if (Object.keys(e2).length) return;
 
-    const msg = `Hola, quiero hacer un pedido:%0ANombre: ${form.nombre}%0ACelular: ${form.tel}%0ACiudad: ${form.ciudad}%0APresentación: ${form.presentacion}${form.nota ? `%0ANota: ${form.nota}` : ''}`;
-    window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
+    const msg = p.mensaje({ ...form, presentacion: p.opciones[form.presentacion] });
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
     setEnviado(true);
   };
 
@@ -40,8 +44,8 @@ export default function OrderForm() {
       <div className="contenedor">
         <div className="info">
           <div className="orn" style={{ marginLeft: 0 }} aria-hidden="true"><OrnIcon /></div>
-          <h2>Haz tu pedido</h2>
-          <p>Déjanos tus datos y te confirmamos disponibilidad y envío por WhatsApp el mismo día. También puedes escribirnos directo si prefieres.</p>
+          <h2>{p.titulo}</h2>
+          <p>{p.bajada}</p>
 
           <div className="datos-contacto">
             <div>
@@ -53,12 +57,12 @@ export default function OrderForm() {
               <a href="https://wa.me/573244408888" target="_blank" rel="noopener noreferrer">+57 324 4408888</a>
             </div>
             <div>
-              <strong>Correo</strong>
+              <strong>{p.correo}</strong>
               <a href="mailto:goldenhaircolombia@gmail.com">goldenhaircolombia@gmail.com</a>
             </div>
             <div>
-              <strong>Atención</strong>
-              Bogotá · Lunes a sábado, 8 a.m. a 6 p.m.
+              <strong>{p.atencion}</strong>
+              {p.horario}
             </div>
           </div>
         </div>
@@ -66,47 +70,44 @@ export default function OrderForm() {
         <div className="formulario">
           {enviado && (
             <div className="exito-msg">
-              <strong>Pedido enviado.</strong> Te escribimos por WhatsApp en las próximas horas para confirmarlo.
+              <strong>{p.exitoTitulo}</strong> {p.exitoTexto}
             </div>
           )}
 
           <form onSubmit={enviar} noValidate>
             <div className={`campo${errores.nombre ? ' error' : ''}`}>
-              <label htmlFor="nombre">Nombre completo</label>
+              <label htmlFor="nombre">{p.nombre}</label>
               <input type="text" id="nombre" value={form.nombre} onChange={set('nombre')} autoComplete="name" />
-              <span className="mensaje-error">Escribe tu nombre para poder contactarte.</span>
+              <span className="mensaje-error">{p.nombreError}</span>
             </div>
 
             <div className={`campo${errores.tel ? ' error' : ''}`}>
-              <label htmlFor="tel">Celular (WhatsApp)</label>
+              <label htmlFor="tel">{p.tel}</label>
               <input type="tel" id="tel" value={form.tel} onChange={set('tel')} inputMode="numeric" placeholder="3001234567" autoComplete="tel" />
-              <span className="mensaje-error">Necesitamos un celular de 10 dígitos.</span>
+              <span className="mensaje-error">{p.telError}</span>
             </div>
 
             <div className={`campo${errores.ciudad ? ' error' : ''}`}>
-              <label htmlFor="ciudad">Ciudad</label>
+              <label htmlFor="ciudad">{p.ciudad}</label>
               <input type="text" id="ciudad" value={form.ciudad} onChange={set('ciudad')} autoComplete="address-level2" />
-              <span className="mensaje-error">Dinos a qué ciudad enviamos.</span>
+              <span className="mensaje-error">{p.ciudadError}</span>
             </div>
 
             <div className={`campo${errores.presentacion ? ' error' : ''}`}>
-              <label htmlFor="presentacion">Presentación</label>
+              <label htmlFor="presentacion">{p.presentacion}</label>
               <select id="presentacion" value={form.presentacion} onChange={set('presentacion')}>
-                <option value="">Elige una opción</option>
-                <option>1 frasco de 250 g – $32.000</option>
-                <option>2 frascos – $60.000 (promoción)</option>
-                <option>3 frascos – $89.000 (envío gratis)</option>
-                <option>Aún no sé, necesito asesoría</option>
+                <option value="">{p.elegir}</option>
+                {p.opciones.map((op, i) => <option key={i} value={i}>{op}</option>)}
               </select>
-              <span className="mensaje-error">Selecciona una presentación.</span>
+              <span className="mensaje-error">{p.presentacionError}</span>
             </div>
 
             <div className="campo">
-              <label htmlFor="nota">Algo más que debamos saber (opcional)</label>
-              <textarea id="nota" value={form.nota} onChange={set('nota')} placeholder="Por ejemplo: tengo el cabello teñido y se me encrespa mucho." />
+              <label htmlFor="nota">{p.nota}</label>
+              <textarea id="nota" value={form.nota} onChange={set('nota')} placeholder={p.notaPlaceholder} />
             </div>
 
-            <button type="submit" className="btn btn-oro btn-bloque">Enviar pedido</button>
+            <button type="submit" className="btn btn-oro btn-bloque">{p.enviar}</button>
           </form>
         </div>
       </div>

@@ -1,32 +1,25 @@
+import { useLang } from '../i18n/LanguageContext';
+
 export default function About() {
+  const { t } = useLang();
+  const n = t.nosotras;
+
   return (
     <section className="seccion historia" id="nosotras">
       <div className="contenedor">
         <div className="retrato">
           <div className="aro" aria-hidden="true" />
-          <img src="/retrato.jpeg" alt="Equipo Golden Hair" />
+          <img src="/retrato.jpeg" alt={n.imgAlt} />
         </div>
 
         <div className="cuerpo-texto">
-          <p className="eyebrow">Quiénes somos</p>
-          <p className="entrada">
-            Golden Hair es un emprendimiento creado por estudiantes con la idea de brindar una opción
-            sencilla, accesible y efectiva para el cuidado del cabello.
-          </p>
-          <p>
-            Nuestro producto principal es una mascarilla capilar diseñada para hidratar, reparar y
-            ayudar a controlar el frizz, dejando el cabello más suave, manejable y con un aspecto saludable.
-          </p>
-          <p>
-            Nacimos de la necesidad de encontrar un producto que cuide el cabello sin complicar demasiado
-            la rutina. Por eso trabajamos con ingredientes seleccionados y ponemos dedicación en cada parte
-            del proceso, buscando que nuestro producto sea útil y agradable para quienes lo utilizan.
-          </p>
+          <p className="eyebrow">{n.eyebrow}</p>
+          <p className="entrada">{n.entrada}</p>
+          {n.parrafos.map(txt => <p key={txt}>{txt}</p>)}
           <div className="firmas">
-            <div><strong>Creado por estudiantes</strong>Un proyecto que nació de una necesidad propia.</div>
-            <div><strong>Un solo paso</strong>Quince minutos a la semana, nada más.</div>
-            <div><strong>Ingredientes seleccionados</strong>Sin sulfatos ni parabenos.</div>
-            <div><strong>Hecho en Colombia</strong>Cuidamos cada parte del proceso.</div>
+            {n.firmas.map(f => (
+              <div key={f.titulo}><strong>{f.titulo}</strong>{f.desc}</div>
+            ))}
           </div>
         </div>
       </div>

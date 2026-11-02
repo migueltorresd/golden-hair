@@ -1,4 +1,9 @@
+import { useLang } from '../i18n/LanguageContext';
+
 export default function Hero() {
+  const { t } = useLang();
+  const h = t.hero;
+
   return (
     <section className="portada" id="inicio">
       <svg className="seda" viewBox="0 0 1440 760" preserveAspectRatio="none" aria-hidden="true">
@@ -11,28 +16,23 @@ export default function Hero() {
       <div className="contenedor">
         <div>
           <img src="/emblema.jpeg" alt="Golden Hair" className="emblema" />
-          <h1>El lujo de un cabello sano</h1>
-          <p className="bajada">
-            Una mascarilla capilar que hidrata, repara y controla el frizz. Un solo paso a la semana,
-            quince minutos, y el cabello vuelve a sentirse suave y manejable.
-          </p>
+          <h1>{h.titulo}</h1>
+          <p className="bajada">{h.bajada}</p>
           <div className="ctas">
-            <a href="#producto" className="btn btn-oro">Comprar ahora</a>
-            <a href="#ritual" className="btn btn-linea">Cómo se usa</a>
+            <a href="#producto" className="btn btn-oro">{h.comprar}</a>
+            <a href="#ritual" className="btn btn-linea">{h.comoSeUsa}</a>
           </div>
           <div className="sellos">
-            <span>250 g</span>
-            <span>Hecha en Colombia</span>
-            <span>Envíos a Bogotá</span>
+            {h.sellos.map(s => <span key={s}>{s}</span>)}
           </div>
         </div>
 
         <div className="escena">
           <div className="marco" aria-hidden="true" />
-          <img src="/producto-hero.jpeg" alt="Mascarilla capilar Golden Hair 250 g" />
+          <img src="/producto-hero.jpeg" alt={h.imgAlt} />
           <div className="gramaje">
             <strong>250 g</strong>
-            <span>Presentación</span>
+            <span>{h.presentacion}</span>
           </div>
         </div>
       </div>

@@ -1,26 +1,32 @@
 import { useState } from 'react';
 import { useCart, PACKS, cop } from '../context/CartContext';
+import { useLang } from '../i18n/LanguageContext';
+
+// Nomenclatura INCI: es internacional, por eso no se traduce.
+const INGREDIENTES = 'Aqua, Cetrimonium Chloride, Paraffinum Liquidum (Mineral Oil), Cocos Nucifera (Coconut) Oil, Glycerin, Argania Spinosa Kernel Oil, Hydrolyzed Collagen, Hydrolyzed Elastin, Tocopherol, Parfum.';
 
 export default function Product() {
   const [packKey, setPackKey] = useState('uno');
   const { agregar } = useCart();
+  const { t } = useLang();
+  const p = t.producto;
   const pack = PACKS[packKey];
 
   return (
     <section className="seccion producto" id="producto">
       <div className="contenedor">
         <div className="foto">
-          <img src="/producto.jpeg" alt="Mascarilla capilar Golden Hair" />
+          <img src="/producto.jpeg" alt={p.imgAlt} />
+          <div className="ingredientes">
+            <h3>{p.ingredientes}</h3>
+            <p>{INGREDIENTES}</p>
+          </div>
         </div>
 
         <div>
-          <p className="eyebrow">Nuestro producto</p>
-          <h2>Mascarilla capilar</h2>
-          <p>
-            Textura en crema, de absorción rápida y aroma suave. Se aplica de medios a puntas sobre
-            el cabello húmedo y se deja actuar quince minutos. Un frasco de 250 g,
-            puede usarse de 1 a 3 veces por semana según el estado del cabello.
-          </p>
+          <p className="eyebrow">{p.eyebrow}</p>
+          <h2>{p.titulo}</h2>
+          <p>{p.desc}</p>
 
           <div className="precio-fila">
             <span className="precio">{cop(pack.precio)}</span>
@@ -29,8 +35,8 @@ export default function Product() {
             )}
           </div>
 
-          <div className="presentaciones" role="group" aria-label="Elige la presentación">
-            {Object.entries(PACKS).map(([key, p]) => (
+          <div className="presentaciones" role="group" aria-label={p.elegirAria}>
+            {Object.entries(PACKS).map(([key, pk]) => (
               <button
                 key={key}
                 className={`pack${packKey === key ? ' seleccionado' : ''}`}
@@ -39,14 +45,14 @@ export default function Product() {
               >
                 <span className="marca-radio" aria-hidden="true" />
                 <span className="nombre">
-                  {p.unidades === 1 ? '1 frasco de 250 g' : `${p.unidades} frascos`}
-                  {p.antes > 0 && (
+                  {pk.unidades === 1 ? p.unFrasco : p.variosFrascos(pk.unidades)}
+                  {pk.antes > 0 && (
                     <span className="ahorro">
-                      Ahorras {cop(p.antes - p.precio)}{key === 'tres' ? ' · el más pedido' : ''}
+                      {p.ahorras} {cop(pk.antes - pk.precio)}{key === 'tres' ? ` · ${p.masPedido}` : ''}
                     </span>
                   )}
                 </span>
-                <span className="valor">{cop(p.precio)}</span>
+                <span className="valor">{cop(pk.precio)}</span>
               </button>
             ))}
           </div>
@@ -55,26 +61,30 @@ export default function Product() {
             className="btn btn-oro btn-bloque"
             onClick={() => agregar(packKey, '/producto.jpeg')}
           >
-            Agregar al carrito
+            {p.agregar}
           </button>
 
           <div className="detalles">
             <details className="detalle">
-              <summary>Modo de uso</summary>
+              <summary>{p.modoDeUso}</summary>
               <div className="contenido">
-                <p>Sobre el cabello limpio y húmedo, aplica de medios a puntas y evita la raíz. Deja actuar quince minutos y enjuaga con agua fría. Una vez por semana es suficiente.</p>
+                <ol>
+                  {p.pasos.map(paso => <li key={paso}>{paso}</li>)}
+                </ol>
               </div>
             </details>
             <details className="detalle">
-              <summary>Ingredientes</summary>
+              <summary>{p.precauciones}</summary>
               <div className="contenido">
-                <p>Formulada con ingredientes seleccionados para hidratar y reparar. Libre de sulfatos y parabenos. La lista completa está impresa en la etiqueta de cada frasco.</p>
+                <ul>
+                  {p.listaPrecauciones.map(item => <li key={item}>{item}</li>)}
+                </ul>
               </div>
             </details>
             <details className="detalle">
-              <summary>Envíos y devoluciones</summary>
+              <summary>{p.envios}</summary>
               <div className="contenido">
-                <p>Solo realizamos envíos en Bogotá. El envío es gratis comprando 3 frascos ($89.000). Aceptamos devoluciones únicamente si el empaque o el producto presenta fallas de fábrica.</p>
+                <p>{p.enviosTexto}</p>
               </div>
             </details>
           </div>

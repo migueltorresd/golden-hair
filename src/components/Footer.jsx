@@ -1,37 +1,38 @@
+import { useLang } from '../i18n/LanguageContext';
+
+const ANCLAS_PRODUCTO = ['#producto', '#ritual', '#nosotras', '#proposito'];
+const ANCLAS_AYUDA = ['#preguntas', '#pedido', '#pedido'];
+
 export default function Footer() {
+  const { t } = useLang();
+  const f = t.pie;
+
   return (
     <footer className="pie">
       <div className="contenedor">
         <div className="pie-grid">
           <div>
             <img src="/logo-pie.jpeg" alt="Golden Hair" className="emb" />
-            <p className="lema">"El lujo de un cabello sano."</p>
-            <p style={{ color: 'var(--texto-suave)', maxWidth: '32ch' }}>
-              Cuidado capilar sencillo, hecho en Colombia por estudiantes.
-            </p>
+            <p className="lema">{f.lema}</p>
+            <p style={{ color: 'var(--texto-suave)', maxWidth: '32ch' }}>{f.desc}</p>
           </div>
 
           <div>
-            <h4>Producto</h4>
+            <h4>{f.producto}</h4>
             <ul>
-              <li><a href="#producto">Mascarilla capilar 250 g</a></li>
-              <li><a href="#ritual">Cómo se usa</a></li>
-              <li><a href="#nosotras">Quiénes somos</a></li>
-              <li><a href="#proposito">Misión y visión</a></li>
+              {f.links.map((txt, i) => <li key={txt}><a href={ANCLAS_PRODUCTO[i]}>{txt}</a></li>)}
             </ul>
           </div>
 
           <div>
-            <h4>Ayuda</h4>
+            <h4>{f.ayuda}</h4>
             <ul>
-              <li><a href="#preguntas">Preguntas frecuentes</a></li>
-              <li><a href="#pedido">Envíos y pagos</a></li>
-              <li><a href="#pedido">Devoluciones</a></li>
+              {f.linksAyuda.map((txt, i) => <li key={txt}><a href={ANCLAS_AYUDA[i]}>{txt}</a></li>)}
             </ul>
           </div>
 
           <div>
-            <h4>Escríbenos</h4>
+            <h4>{f.escribenos}</h4>
             <ul>
               <li><a href="https://wa.me/573213268940" target="_blank" rel="noopener noreferrer">+57 321 3268940</a></li>
               <li><a href="https://wa.me/573023051729" target="_blank" rel="noopener noreferrer">+57 302 3051729</a></li>
@@ -42,8 +43,8 @@ export default function Footer() {
         </div>
 
         <div className="legal">
-          <span>© {new Date().getFullYear()} Golden Hair. Todos los derechos reservados.</span>
-          <span>Sitio de demostración — proyecto escolar</span>
+          <span>© {new Date().getFullYear()} Golden Hair. {f.derechos}</span>
+          <span>{f.demo}</span>
         </div>
       </div>
     </footer>

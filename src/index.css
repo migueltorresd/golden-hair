@@ -86,6 +86,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .acciones { display: flex; align-items: center; gap: 10px; }
 .btn-carrito { display: flex; align-items: center; gap: 9px; padding: .6rem 1.1rem; border: 1px solid var(--linea); border-radius: 2px; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; background: var(--blanco); }
 .btn-carrito:hover { border-color: var(--oro); }
+.btn-idioma { padding: .6rem .8rem; border: 1px solid var(--linea); border-radius: 2px; font-size: .8rem; letter-spacing: .12em; background: var(--blanco); }
+.btn-idioma:hover { border-color: var(--oro); }
 .globo { min-width: 21px; height: 21px; padding: 0 6px; border-radius: 999px; background: var(--oro); color: #fff; font-size: .74rem; font-weight: 500; display: grid; place-items: center; }
 .btn-menu { display: none; padding: 8px; }
 .btn-menu span { display: block; width: 22px; height: 1.5px; background: var(--texto); margin: 5px 0; transition: .2s; }
@@ -131,6 +133,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .producto .contenedor { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 .producto .foto { position: relative; }
 .producto .foto img { width: 100%; border-radius: 3px; box-shadow: var(--sombra); }
+.ingredientes { margin-top: 22px; padding: 18px 22px; border: 1px solid var(--linea); border-radius: 3px; background: var(--blanco); }
+.ingredientes h3 { font-family: "Cinzel", serif; font-size: .85rem; letter-spacing: .1em; margin-bottom: 8px; }
+.ingredientes p { margin: 0; color: var(--texto-suave); font-size: .88rem; line-height: 1.6; }
 .eyebrow { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; color: var(--oro-oscuro); margin-bottom: 14px; }
 .producto h2 { margin-bottom: 18px; }
 .precio-fila { display: flex; align-items: baseline; gap: 12px; margin: 24px 0 28px; }
@@ -156,10 +161,11 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .detalle[open] summary::after { content: "−"; }
 .detalle .contenido { padding: 16px 0 20px; border-bottom: 1px solid var(--linea); color: var(--texto-suave); font-size: .95rem; }
 .detalle .contenido p:last-child { margin: 0; }
+.detalle .contenido ol, .detalle .contenido ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 8px; }
 
 /* ---------- ritual ---------- */
 .ritual { background: var(--crema); }
-.pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+.pasos { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
 .paso { padding: 0 26px; text-align: center; position: relative; }
 .paso + .paso::before { content: ""; position: absolute; left: 0; top: 14%; bottom: 14%; width: 1px; background: var(--linea); }
 .paso .num { font-family: "Cinzel", serif; font-size: .78rem; letter-spacing: .2em; color: var(--oro-oscuro); margin-bottom: 14px; }
@@ -293,7 +299,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   .columna + .columna::before { left: 0; right: 0; top: -22px; bottom: auto; width: auto; height: 1px; }
   .historia .retrato { order: -1; }
   .pasos { grid-template-columns: repeat(2, 1fr); gap: 38px 0; }
-  .paso:nth-child(3)::before { display: none; }
+  .paso:nth-child(odd)::before { display: none; }
   .pie-grid { grid-template-columns: 1fr 1fr; }
   .beneficios .contenedor { grid-template-columns: 1fr; gap: 34px; }
   .beneficio + .beneficio { border-left: none; border-top: 1px solid var(--linea); padding-top: 34px; }

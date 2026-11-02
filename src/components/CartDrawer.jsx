@@ -1,34 +1,37 @@
 import { useCart, cop } from '../context/CartContext';
+import { useLang } from '../i18n/LanguageContext';
 
 export default function CartDrawer() {
   const { items, abierto, cerrar, total, ENVIO_GRATIS, cambiarCantidad, quitar, urlWa } = useCart();
+  const { t } = useLang();
+  const c = t.carrito;
 
   return (
     <>
       <div className={`velo${abierto ? ' abierto' : ''}`} onClick={cerrar} />
 
-      <aside className={`carrito${abierto ? ' abierto' : ''}`} role="dialog" aria-modal="true" aria-label="Carrito de compras">
+      <aside className={`carrito${abierto ? ' abierto' : ''}`} role="dialog" aria-modal="true" aria-label={c.aria}>
         <div className="carrito-cab">
-          <h3>Tu carrito</h3>
-          <button className="cerrar" onClick={cerrar} aria-label="Cerrar carrito">×</button>
+          <h3>{c.titulo}</h3>
+          <button className="cerrar" onClick={cerrar} aria-label={c.cerrar}>×</button>
         </div>
 
         <div className="carrito-cuerpo">
           {items.length === 0 ? (
-            <div className="carrito-vacio">Tu carrito está vacío.</div>
+            <div className="carrito-vacio">{c.vacio}</div>
           ) : (
             items.map(item => (
               <div className="linea-carrito" key={item.key}>
-                <img src={item.foto} alt={item.nombre} />
+                <img src={item.foto} alt={c.packs[item.key]} />
                 <div>
-                  <h4>{item.nombre}</h4>
-                  <div className="u">{cop(item.precio)} c/u</div>
+                  <h4>{c.packs[item.key]}</h4>
+                  <div className="u">{cop(item.precio)} {c.cadaUno}</div>
                   <div className="cantidad">
-                    <button onClick={() => cambiarCantidad(item.key, -1)} aria-label="Restar">−</button>
+                    <button onClick={() => cambiarCantidad(item.key, -1)} aria-label={c.restar}>−</button>
                     <span>{item.qty}</span>
-                    <button onClick={() => cambiarCantidad(item.key, 1)} aria-label="Sumar">+</button>
+                    <button onClick={() => cambiarCantidad(item.key, 1)} aria-label={c.sumar}>+</button>
                   </div>
-                  <button className="quitar" onClick={() => quitar(item.key)}>Quitar</button>
+                  <button className="quitar" onClick={() => quitar(item.key)}>{c.quitar}</button>
                 </div>
                 <div style={{ fontFamily: '"Cinzel",serif', fontWeight: 600, fontSize: '.9rem' }}>
                   {cop(item.precio * item.qty)}
@@ -40,14 +43,14 @@ export default function CartDrawer() {
 
         <div className="carrito-pie">
           <div className="total">
-            <span className="etq">Total</span>
+            <span className="etq">{c.total}</span>
             <span className="cifra">{cop(total)}</span>
           </div>
           <p className="nota-envio">
-            {total >= ENVIO_GRATIS ? 'Envío gratis incluido.' : `Envío gratis desde ${cop(ENVIO_GRATIS)}.`}
+            {total >= ENVIO_GRATIS ? c.envioIncluido : c.envioDesde(cop(ENVIO_GRATIS))}
           </p>
           <a className="btn btn-oro btn-bloque" href={urlWa()} target="_blank" rel="noopener noreferrer">
-            Pedir por WhatsApp
+            {c.pedirWa}
           </a>
         </div>
       </aside>

@@ -1,12 +1,13 @@
 import { createContext, useContext, useState, useCallback } from 'react';
+import { useLang } from '../i18n/LanguageContext';
 
 const WHATSAPP = '573213268940';
 const ENVIO_GRATIS = 89000;
 
 export const PACKS = {
-  uno:  { nombre: 'Mascarilla capilar 250 g', unidades: 1, precio: 32000, antes: 0 },
-  dos:  { nombre: 'Mascarilla capilar — 2 frascos', unidades: 2, precio: 60000, antes: 64000 },
-  tres: { nombre: 'Mascarilla capilar — 3 frascos', unidades: 3, precio: 89000, antes: 96000 },
+  uno:  { unidades: 1, precio: 32000, antes: 0 },
+  dos:  { unidades: 2, precio: 60000, antes: 64000 },
+  tres: { unidades: 3, precio: 89000, antes: 96000 },
 };
 
 export const cop = n => '$' + n.toLocaleString('es-CO');
@@ -14,6 +15,7 @@ export const cop = n => '$' + n.toLocaleString('es-CO');
 const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
+  const { t } = useLang();
   const [items, setItems] = useState([]);
   const [abierto, setAbierto] = useState(false);
   const [toast, setToast] = useState('');
@@ -34,8 +36,8 @@ export function CartProvider({ children }) {
       }
       return [...prev, { key: packKey, ...pack, foto, qty: 1 }];
     });
-    mostrarToast('Agregado al carrito');
-  }, [mostrarToast]);
+    mostrarToast(t.carrito.agregado);
+  }, [mostrarToast, t]);
 
   const cambiarCantidad = useCallback((key, delta) => {
     setItems(prev => {
@@ -54,9 +56,10 @@ export function CartProvider({ children }) {
 
   const urlWa = () => {
     if (!items.length) return `https://wa.me/${WHATSAPP}`;
-    const lineas = items.map(i => `• ${i.nombre} x${i.qty} = ${cop(i.precio * i.qty)}`).join('%0A');
-    const env = total >= ENVIO_GRATIS ? '%0AEnvío gratis incluido.' : '';
-    return `https://wa.me/${WHATSAPP}?text=Hola,%20quiero%20pedir:%0A${lineas}%0ATotal:%20${cop(total)}${env}`;
+    const lineas = items.map(i => `• ${t.carrito.packs[i.key]} x${i.qty} = ${cop(i.precio * i.qty)}`).join('\n');
+    const env = total >= ENVIO_GRATIS ? `\n${t.carrito.waEnvio}` : '';
+    const texto = `${t.carrito.waSaludo}\n${lineas}\n${t.carrito.total}: ${cop(total)}${env}`;
+    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
   };
 
   return (
