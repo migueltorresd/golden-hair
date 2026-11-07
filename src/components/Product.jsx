@@ -48,7 +48,7 @@ export default function Product() {
                   {pk.unidades === 1 ? p.unFrasco : p.variosFrascos(pk.unidades)}
                   {pk.antes > 0 && (
                     <span className="ahorro">
-                      {p.ahorras} {cop(pk.antes - pk.precio)}{key === 'tres' ? ` · ${p.masPedido}` : ''}
+                      {p.ahorras} {cop(pk.antes - pk.precio)}{key === 'tres' ? ` · ${p.promoEspecial}` : ''}
                     </span>
                   )}
                 </span>

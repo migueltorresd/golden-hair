@@ -31,7 +31,7 @@ export default function Hero() {
           <div className="marco" aria-hidden="true" />
           <img src="/producto-hero.jpeg" alt={h.imgAlt} />
           <div className="gramaje">
-            <strong>250 g</strong>
+            <strong>210 g</strong>
             <span>{h.presentacion}</span>
           </div>
         </div>

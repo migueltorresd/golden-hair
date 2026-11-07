@@ -2,12 +2,12 @@ import { createContext, useContext, useState, useCallback } from 'react';
 import { useLang } from '../i18n/LanguageContext';
 
 const WHATSAPP = '573213268940';
-const ENVIO_GRATIS = 89000;
+const ENVIO_GRATIS = 38000;
 
 export const PACKS = {
-  uno:  { unidades: 1, precio: 32000, antes: 0 },
-  dos:  { unidades: 2, precio: 60000, antes: 64000 },
-  tres: { unidades: 3, precio: 89000, antes: 96000 },
+  uno:  { unidades: 1, precio: 14000, antes: 0 },
+  dos:  { unidades: 2, precio: 28000, antes: 0 },
+  tres: { unidades: 3, precio: 38000, antes: 42000 },
 };
 
 export const cop = n => '$' + n.toLocaleString('es-CO');
